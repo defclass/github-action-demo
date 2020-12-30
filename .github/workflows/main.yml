@@ -41,9 +41,9 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Fetch deps
         run: |
-          cljoure -P
+          clojure -P
 
 
       - name: Run tests
         run: |
-            clojure -M:test:runner
+          clojure -M:test:runner
