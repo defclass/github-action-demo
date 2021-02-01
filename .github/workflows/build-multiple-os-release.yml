@@ -31,8 +31,20 @@ jobs:
           name: README-macos.zip
           path: ./README-macos.zip
 
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: List file
+        run: ls -rl
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - run: Dir .
+
+
   release:
-    needs: [build-macos]
+    needs: [build-macos, build-linux, build-windows]
     runs-on: ubuntu-latest
 
     steps:
@@ -40,7 +52,7 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: README-macos.zip
-          path: .
+          path: ./README-x86-macos.zip
 
       - name: List file
         run: ls -rl
@@ -52,7 +64,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.event.inputs.tag-name }}
-          release_name: Release ${{ github.event.inputs.tag-name }}
+          release_name: TEST CI (DON'T DOWNLOAD) ${{ github.event.inputs.tag-name }}
           draft: false
           prerelease: true
 
@@ -63,6 +75,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./README-macos.zip
+          asset_path: ./README-x86-macos.zip
           asset_name: README-macos.zip
           asset_content_type: application/zip
