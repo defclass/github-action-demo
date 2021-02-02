@@ -34,26 +34,36 @@ jobs:
   #          name: README-x86-macos.zip
   #          path: ./README-x86-macos.zip
   #
-  #  build-linux:
-  #    runs-on: ubuntu-latest
-  #    steps:
-  #      - name: List file
-  #        run: ls -rl
-
-  build-windows:
-    runs-on: windows-latest
+  build-linux:
+    runs-on: ubuntu-latest
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v1
 
-      - run: dir
-        working-directory: src\defclass
+      - name: Test Sensitive Data
+        run: |
+          sed -i 's/FIXME: my new application/${{ secrets.TEST_SENSITIVE_FIELD }}/g' ./README.md
 
-      - name: rename file name
-        run: Get-ChildItem src\defclass\*.clj | Rename-Item -NewName  ${{ github.event.inputs.tag-name }}.exe
+      - name: Display README
+        run: cat ./README.md
 
-      - run: dir
-        working-directory: src\defclass
+      - name: List file
+        run: ls -rl
+
+#  build-windows:
+#    runs-on: windows-latest
+#    steps:
+#      - name: Check out Git repository
+#        uses: actions/checkout@v1
+#
+#      - run: dir
+#        working-directory: src\defclass
+#
+#      - name: rename file name
+#        run: Get-ChildItem src\defclass\*.clj | Rename-Item -NewName  ${{ github.event.inputs.tag-name }}.exe
+#
+#      - run: dir
+#        working-directory: src\defclass
 
 
 #  release:
